@@ -566,7 +566,7 @@ p.sub em{font-style:normal;font-weight:700;color:var(--blue)}
 (function(){
 'use strict';
 const NEED='확인 필요';
-const STORE='mokwoo-briefing-2027-v31';
+const STORE='mokwoo-briefing-2027-v32';
 const KINDS=['최초합','추가합','예비','등록','자료에서 구분되지 않음'];
 const $=(s,el)=>(el||document).querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -722,6 +722,7 @@ R[3]=i=>{
         const tot=a&&a.totalStatus==='확정'&&isNum(a.totalAll)?a.totalAll:null;
         if(!compact&&tot!=null)subs.push(`전체 ${tot.toLocaleString('ko-KR')}건`);
         if(a&&a.sizeStatus==='확정'&&isNum(a.size))subs.push(`규모 ${a.size.toLocaleString('ko-KR')}명`);
+        if(a&&has(a.tag))subs.push(a.tag);
         return barRow(x[0],x[1],max,k,{sub:compact?'':subs.join(' · '),mid:compact,tail:compact&&subs.length?subs.join(' · '):'',extra:compact?(tot!=null?`<b>${tot.toLocaleString('ko-KR')}</b><span>건</span>`:'<em title="원자료에 전체 합격 칸이 비어 있음">—</em>'):null});
       }).join('');
       return `<div class="panel"><div class="panel-h"><div><h3>${esc(b.label||b.id)}</h3><div class="cap">${esc([b.period,b.scope&&b.scope!==NEED?'범위 '+b.scope:'범위 확인 필요'].filter(Boolean).join(' · '))} · 단위: 합격 건수(학원 단위)</div></div><div class="badges" style="justify-content:flex-end;max-width:56%">${basisBadges(b)}</div></div>${compact?'<div class="rowh"><span></span><span>주요대학 합격</span><span>전체 합격</span></div>':''}<div class="rows">${rows}</div><div style="margin-top:auto;padding-top:18px">${call}</div></div>`;
@@ -1258,15 +1259,15 @@ const DATA = {
 
   /* 학원 — 학원명만. totalAll = 원자료 '전체' 합격 건수 (반 단위 자료는 비워 둠) */
   academies: [
-    { name: '목우',          totalAll: 96,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 86건 + 경희대 10건(2026. 11. 26. 사용자 전달)' },
-    { name: '천년의 미소 본원',totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료에 전체 합격 칸이 비어 있음' },
+    { name: '목우',          totalAll: 101,  totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 86건 + 경희대 10건 + 상명대 5건(2026. 11. 26. 사용자 전달)' },
+    { name: '천년의 미소 본원',totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', tag: '경희대 추정 포함', note: '원자료에 전체 합격 칸이 비어 있음. 경희대는 본원 9명 추정' },
     { name: '대구 상인클라우드', totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료에 전체 합격 칸이 비어 있음' },
-    { name: '동탄 C&C',      totalAll: 50,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
+    { name: '동탄 C&C',      totalAll: 53,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
     { name: '평택 웨이브',     totalAll: 26,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
-    { name: '향남 아이엠',     totalAll: 25,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
+    { name: '향남 아이엠',     totalAll: 30,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
     { name: '미금 바우하우스',  totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '이미지9에서 특정 반 실적으로 표기 — 학원 전체 여부 확인 필요' },
-    { name: '수원 Hi5',      totalAll: 7,    totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. Hi5 소속 (사용자 확인)' },
-    { name: '북수원 Hi5',     totalAll: 28,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. Hi5 소속 (사용자 확인)' }
+    { name: '수원 Hi5',      totalAll: 11,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. Hi5 소속 (사용자 확인)' },
+    { name: '북수원 Hi5',     totalAll: 30,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. Hi5 소속 (사용자 확인)' }
   ],
 
   /* 합격 기록 — 원자료에 인쇄된 숫자만. 손글씨 메모는 사용하지 않음 */
@@ -1283,6 +1284,18 @@ const DATA = {
     { academy: '수원 Hi5', university: '주요대학 합계', track: '', dept: '', count: 7, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '원자료 행 이름이 반 단위' },
     { academy: '북수원 Hi5', university: '주요대학 합계', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '원자료 행 이름이 반 단위' },
 
+    /* 2026. 11. 26. 사용자 전달 추가분 — 경희대·상명대 (상명대는 주요대학으로 분류, 전체 합격에도 더함) */
+    { academy: '목우', university: '상명대 (추가)', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '천년의 미소 본원', university: '경희대 (추가)', track: '', dept: '', count: 9, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '전체 15명 중 본원 9명 추정 (나머지는 다른 캠퍼스로 보임) — 사용자 전달' },
+    { academy: '천년의 미소 본원', university: '상명대 (추가)', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '동탄 C&C', university: '상명대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '향남 아이엠', university: '경희대 (추가)', track: '', dept: '', count: 2, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '향남 아이엠', university: '상명대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '미금 바우하우스', university: '경희대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '수원 Hi5', university: '상명대 (추가)', track: '', dept: '', count: 4, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '북수원 Hi5', university: '경희대 (추가)', track: '', dept: '', count: 1, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '북수원 Hi5', university: '상명대 (추가)', track: '', dept: '', count: 1, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+
     /* B2: 목우 대학별 (이미지2·6·8 공통, 합계 53) */
     { academy: '목우', university: '경희대',   track: '', dept: '', count: 10, kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '2026. 11. 26. 발표분 사용자 전달' },
     { academy: '목우', university: '경기대',   track: '', dept: '', count: 19, kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: 'img6', status: '확정', note: '' },
@@ -1294,6 +1307,7 @@ const DATA = {
     { academy: '목우', university: '중앙대',   track: '', dept: '', count: 2,  kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: 'img6', status: '확정', note: '' },
     { academy: '목우', university: '숙명여대', track: '', dept: '', count: 1,  kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: 'img6', status: '확정', note: '' },
     { academy: '목우', university: '한양대',   track: '', dept: '서울+ERICA', count: 1, kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: 'img2', status: '확정', note: '캠퍼스 구분 없음(서울+ERICA)' },
+    { academy: '목우', university: '상명대',   track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
     { academy: '목우', university: '서울과기대', track: '', dept: '', count: 1, kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: 'img8', status: '확정', note: "이미지2·6은 '과기대'로 표기" }
   ],
 
@@ -1344,12 +1358,12 @@ const DATA = {
       ],
       notes: '오늘은 목우의 결과를 자신 있게 보여주는 자리입니다. 다른 학원을 평가하는 자리는 아니라는 점을 짧게 말하고 시작해 주세요.' },
     { kicker: '2027학년도 수시 · 목우미술학원', headline: '', sub: '', heroLabel: '전체 합격', heroSub: '주요대학 합격',
-      notes: '숫자가 다 올라갈 때까지 잠깐 기다렸다가 말해 주세요. 2026년 11월 26일 기준이고, 수시 발표가 아직 남아 있어 숫자는 더 늘어날 수 있다고 꼭 덧붙여 주세요.\n올해 목우는 수시에서 전체 96건, 그중 주요대학 63건의 합격을 만들었습니다. 오늘 발표된 경희대 10건까지 포함한 숫자입니다.\n이제 이 숫자가 다른 학원과 비교하면 어느 정도인지, 그리고 어느 대학에서 나왔는지 차례로 보겠습니다.' },    { kicker: '학원별 입결', headline: '한 표에 모아 보면, <em>목우의 결과</em>가 보입니다.',
+      notes: '숫자가 다 올라갈 때까지 잠깐 기다렸다가 말해 주세요. 2026년 11월 26일 기준이고, 수시 발표가 아직 남아 있어 숫자는 더 늘어날 수 있다고 꼭 덧붙여 주세요.\n올해 목우는 수시에서 전체 101건, 그중 주요대학 68건의 합격을 만들었습니다. 오늘 발표된 경희대 10건과 상명대 5건까지 포함한 숫자입니다.\n이제 이 숫자가 다른 학원과 비교하면 어느 정도인지, 그리고 어느 대학에서 나왔는지 차례로 보겠습니다.' },    { kicker: '학원별 입결', headline: '한 표에 모아 보면, <em>목우의 결과</em>가 보입니다.',
       sub: '학원별로 공개된 주요대학 합격과 전체 합격 건수를 한 표에 모았습니다.',
-      notes: '공개된 자료를 같은 표에 모았을 뿐, 다른 학원을 평가하려는 장이 아닙니다.\n천년의 미소는 서초·강남을 합친 본원 실적입니다.\n합격 건수는 학생 수가 아니므로 “합격률”로 말하지 않습니다.' },
+      notes: '공개된 자료를 같은 표에 모았을 뿐, 다른 학원을 평가하려는 장이 아닙니다.\n천년의 미소는 서초·강남을 합친 본원 실적입니다. 경희대는 전체 15명 중 본원 9명으로 추정해 넣었습니다.\n오늘 발표된 경희대·상명대 합격은 학원마다 전달받은 숫자를 주요·전체에 함께 더했습니다.\n합격 건수는 학생 수가 아니므로 “합격률”로 말하지 않습니다.' },
     { kicker: '목우 대학별 결과', headline: '목우의 주요대학 합격, <em>{대학수}개 대학</em>에서 나왔습니다.',
       sub: '주요대학 <em>{합계}건</em>  /  전체 합격 <em>{전체}건</em>',
-      notes: '11월 26일 발표된 경희대 합격 10건이 새로 더해졌습니다(원자료 표 이후 추가분).\n경기대처럼 많이 나온 대학도 있고, 중앙대·숙명여대·한양대처럼 한두 건씩 나온 대학도 있습니다.\n한양대는 원자료에서 서울과 ERICA가 구분되지 않았습니다. 집계 시점이 표시되지 않은 자료이므로 “현재 기준”이라고 덧붙여 주세요.' },
+      notes: '11월 26일 기준으로 경희대 10건과 상명대 5건이 새로 더해졌습니다(원자료 표 이후 추가분).\n경기대처럼 많이 나온 대학도 있고, 중앙대·숙명여대·한양대처럼 한두 건씩 나온 대학도 있습니다.\n한양대는 원자료에서 서울과 ERICA가 구분되지 않았습니다. 집계 시점이 표시되지 않은 자료이므로 “현재 기준”이라고 덧붙여 주세요.' },
     { kicker: '선배들의 내신', headline: '내신은 <em>티켓</em>, 합격은 <em>실기</em>가 만듭니다.',
       sub: '4~5등급대 내신으로도 주요대학 합격. 내신까지 갖추면 선택지가 더 넓어집니다.',
       notes: '이 장의 메시지는 두 가지입니다. 내신은 원서를 쓸 수 있는 티켓이고, 합격은 실기가 만듭니다.\n자랑할 부분: 목우 선배들은 내신이 높지 않았습니다. 2026학년도 합격생 133명 중 3등급 이내는 16명(약 12%)뿐이고, 절반 이상이 4~5등급대였습니다. 그런데도 경기대(합격생 평균 5.12등급), 동덕여대(4.44등급), 단국대(4.40등급) 같은 대학에 합격했습니다. 이건 목우의 실기 지도가 만든 결과입니다.\n그래서 여러분에게 하고 싶은 말: 실기는 목우가 끝까지 끌어올립니다. 여기에 내신까지 갖추면 숙명여대·홍익대·한양대(평균 2.9~3.1등급)처럼 더 위쪽 대학에도 원서를 쓰고 실기로 승부할 수 있습니다. 목우는 내신으로 원서 자격을 먼저 갖추고 실기로 승부하는 방식으로 입시를 진행합니다.\n표의 평균 내신은 2024~2026학년도 목우 수시 합격자 기준(9등급제)입니다. 여러분은 5등급제라 그대로 옮기지 말고 수준을 가늠하는 용도로만 설명해 주세요. 한양대 서울·ERICA는 합격 건수가 적어 참고용입니다.' },
