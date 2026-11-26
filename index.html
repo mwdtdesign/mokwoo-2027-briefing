@@ -103,7 +103,33 @@ p.sub{font-size:25px;line-height:1.55;font-weight:500;letter-spacing:-.01em;colo
 .cover h1{font-size:92px;line-height:1.08;font-weight:700;letter-spacing:-.045em;margin:0 0 26px;max-width:1300px}
 .cover .subt{font-size:36px;color:#A1A1A6;font-weight:500;letter-spacing:-.02em;margin:0 0 52px}
 .cover .meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.cover .big{position:absolute;left:50%;bottom:-70px;transform:translateX(-50%);font-size:340px;font-weight:800;line-height:1;letter-spacing:-.06em;color:transparent;background:linear-gradient(180deg,rgba(41,151,255,.22),rgba(41,151,255,0) 75%);-webkit-background-clip:text;background-clip:text;pointer-events:none}
+/* 1장 배경: 2027 무빙 포스터 (제목·글씨는 고정, 뒤 배경만 천천히 움직임) */
+.cbg{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.cbg .orb{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform}
+.cbg .o1{width:640px;height:640px;left:-160px;top:-220px;background:radial-gradient(circle,rgba(41,151,255,.55),transparent 66%)}
+.cbg .o2{width:600px;height:600px;right:-180px;bottom:-240px;background:radial-gradient(circle,rgba(94,92,230,.5),transparent 66%)}
+.cbg .o3{width:420px;height:420px;left:58%;top:-60px;background:radial-gradient(circle,rgba(255,111,181,.22),transparent 66%)}
+.cbg .big{position:absolute;left:50%;bottom:-70px;transform:translateX(-50%);font-size:340px;font-weight:800;line-height:1;letter-spacing:-.06em;white-space:nowrap}
+.cbg .big span{display:inline-block;color:transparent;background:linear-gradient(180deg,rgba(41,151,255,.26),rgba(41,151,255,0) 78%);-webkit-background-clip:text;background-clip:text;will-change:transform}
+.cbg .ghost{bottom:-20px;font-size:420px;opacity:.9}
+.cbg .ghost span{background:none;-webkit-text-stroke:1.2px rgba(120,180,255,.16)}
+.cbg .sweep{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(100deg,transparent 40%,rgba(255,255,255,.05) 50%,transparent 60%);background-size:250% 100%;mix-blend-mode:screen}
+.slide.active .cbg .o1{animation:orbA 19s ease-in-out infinite alternate}
+.slide.active .cbg .o2{animation:orbB 23s ease-in-out infinite alternate}
+.slide.active .cbg .o3{animation:orbC 27s ease-in-out infinite alternate}
+.slide.active .cbg .big:not(.ghost) span{animation:dFloat 7s ease-in-out infinite alternate}
+.slide.active .cbg .big:not(.ghost) span:nth-child(2){animation-delay:-1.8s;animation-duration:8s}
+.slide.active .cbg .big:not(.ghost) span:nth-child(3){animation-delay:-3.6s;animation-duration:6.5s}
+.slide.active .cbg .big:not(.ghost) span:nth-child(4){animation-delay:-5.2s;animation-duration:7.5s}
+.slide.active .cbg .ghost{animation:gDrift 26s ease-in-out infinite alternate}
+.slide.active .cbg .sweep{animation:sweep 9s linear infinite}
+@keyframes orbA{to{transform:translate(260px,140px) scale(1.15)}}
+@keyframes orbB{to{transform:translate(-300px,-120px) scale(1.1)}}
+@keyframes orbC{to{transform:translate(-420px,180px) scale(.85)}}
+@keyframes dFloat{from{transform:translateY(14px)}to{transform:translateY(-22px)}}
+@keyframes gDrift{from{transform:translateX(-56%)}to{transform:translateX(-44%)}}
+@keyframes sweep{from{background-position:120% 0}to{background-position:-120% 0}}
+@media (prefers-reduced-motion: reduce){.slide.active .cbg *{animation:none!important}}
 
 /* =========================================================
    2. 오늘의 순서
@@ -584,6 +610,63 @@ p.sub em{font-style:normal;font-weight:700;color:var(--blue)}
 .adcheck span{display:inline-flex;align-items:center;gap:8px;font-size:17px;font-weight:600;margin-right:14px}
 .adcheck span b{width:22px;height:22px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-size:12px}
 @media (prefers-reduced-motion: reduce){.play .adn s::after{animation:none}}
+/* 누적 합격(흰 배경): 흰 글자 → 진한 파란색으로 점점 (--p: 0 → 1) */
+.herolight{background:#fff}
+.herolight .hveil{display:none}
+.herolight .hk{color:color-mix(in srgb,var(--blue) calc(var(--p,1) * 100%),#fff)}
+.herolight .hnum b{color:color-mix(in srgb,#0058B8 calc(var(--p,1) * 100%),#fff);text-shadow:none}
+.herolight .hnum span{color:color-mix(in srgb,#0071E3 calc(var(--p,1) * 100%),#fff)}
+.herolight .hl1{color:color-mix(in srgb,var(--ink) calc(var(--p,1) * 100%),#fff)}
+.herolight .hsub{background:var(--blue-soft);box-shadow:none}
+.herolight .hsub span:first-child{color:var(--blue);font-weight:700}
+.herolight .hasof{color:var(--ink3);text-shadow:none}
+.herolight .hbar{opacity:calc(.04 + .26 * var(--p,1))}
+.herolight .hline{opacity:calc(.1 + .6 * var(--p,1));filter:none}
+.herolight .hdot{fill:var(--blue);filter:none}
+.herolight .hsub{padding:8px 22px 9px;margin-top:30px}
+.herolight .hsub span:first-child{font-size:19px}
+.herolight .hasof{font-size:15px;margin-top:14px}
+.hlab{font-family:var(--font);opacity:calc(.12 + .38 * clamp(0, calc((var(--p,1) - var(--t,0)) * 2.2), 1))}
+.hlu{font-size:21px;font-weight:600;fill:#0071E3}
+.hln{font-size:21px;font-weight:800;fill:#0058B8}
+/* 9등급 → 5등급 환산 */
+.cvpanel{padding:18px 28px 20px;margin-bottom:16px;flex-shrink:0}
+.cvaxis{display:grid;grid-template-columns:150px 1fr;align-items:end;margin-bottom:6px}
+.cvtitle{font-size:13px;font-weight:600;color:var(--ink3)}
+.cvticks{position:relative;height:18px}
+.cvticks span{position:absolute;transform:translateX(-50%);font-size:12px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.cvticks span:first-child{transform:none}.cvticks span:last-child{transform:translateX(-100%)}
+.cvrow{display:grid;grid-template-columns:150px 1fr;align-items:center;margin-top:8px}
+.cvname{font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.cvname small{display:block;font-size:13px;font-weight:500;color:var(--ink3)}
+.n5 .cvname{color:var(--blue)}
+.cvbar{position:relative;height:58px}
+.cvseg{position:absolute;top:0;bottom:0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 2px #fff;overflow:hidden}
+.n9 .cvseg{background:#E8E8ED}.n9 .cvseg:nth-child(even){background:#DCDCE2}
+.n5 .cvseg{background:var(--blue-soft)}.n5 .cvseg:nth-child(even){background:#CFE2FA}
+.n5 .cvseg:nth-child(2){background:var(--blue)}.n5 .cvseg:nth-child(2) b,.n5 .cvseg:nth-child(2) span{color:#fff}
+.n9 .cvseg:nth-child(3){background:#BDBDC6}
+.cvseg b{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1}
+.n5 .cvseg b{color:var(--blue)}
+.cvseg span{font-size:11.5px;color:var(--ink2);margin-top:3px;white-space:nowrap}
+.play .cvseg{animation:cvIn .5s cubic-bezier(.2,.8,.3,1) both;animation-delay:calc(.15s + var(--k) * 70ms)}
+.play .n5 .cvseg{animation-delay:calc(.8s + var(--k) * 90ms)}
+@keyframes cvIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.cvbottom{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;flex:1;min-height:0;margin-bottom:18px}
+table.cvtable{width:100%;border-collapse:collapse;background:var(--paper);border-radius:20px;overflow:hidden}
+.cvtable th{font-size:13.5px;font-weight:600;color:var(--ink3);text-align:left;padding:12px 18px 8px;border-bottom:1px solid var(--line)}
+.cvtable td{padding:8px 18px;border-bottom:1px solid #F0F0F3;font-size:17px}
+.cvtable tr:last-child td{border-bottom:none}
+.cvtable td.g5 b{font-size:19px;color:var(--blue);font-weight:800}
+.cvtable td.pc{color:var(--ink2);font-variant-numeric:tabular-nums}
+.cvtable td.g9{font-weight:600}
+.cvtable tr.hi td{background:var(--blue-soft)}
+.cvcall{background:var(--dark-2);color:#F5F5F7;border-radius:20px;padding:22px 26px;display:flex;flex-direction:column;gap:8px}
+.cvcall small{font-size:13px;color:var(--blue-2);font-weight:600}
+.cvcall p{margin:0;font-size:24px;font-weight:600;line-height:1.45;letter-spacing:-.02em}
+.cvcall p b{color:var(--blue-2)}
+.cvcall em{font-style:normal;margin-top:auto;font-size:13px;color:#A1A1A6;line-height:1.5}
+@media (prefers-reduced-motion: reduce){.play .cvseg{animation:none}}
 .share #btnEdit,.share #btnNotes,.share #btnPrintNotes,.share #storedFlag,.share #notes{display:none!important}
 </style>
 
@@ -646,7 +729,7 @@ p.sub em{font-style:normal;font-weight:700;color:var(--blue)}
 (function(){
 'use strict';
 const NEED='확인 필요';
-const STORE='mokwoo-briefing-2027-v44';
+const STORE='mokwoo-briefing-2027-v3copy-6';   /* 복사본 전용 저장 키 (원본과 섞이지 않게) */
 const KINDS=['최초합','추가합','예비','등록','자료에서 구분되지 않음'];
 const $=(s,el)=>(el||document).querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -726,14 +809,18 @@ function barRow0(label,res,max,i,opt){
 /* ---------- 대학 표시 순서 (DATA meta.uniOrder) ---------- */
 function uniRank(u){const o=D.meta.uniOrder||[];const k=o.indexOf(String(u).replace(/\s*\(.*\)\s*$/,'').trim());return k<0?999:k}
 /* ---------- 슬라이드 틀 ---------- */
+/* 숨김 처리(slides[n].hidden: true)된 장은 건너뛰고, 쪽 번호는 보이는 장 기준으로 매김 */
+function VIS(){const o=(D.meta.order&&D.meta.order.length)?D.meta.order:D.slides.map((_,k)=>k);return o.filter(k=>D.slides[k]&&!D.slides[k].hidden)}
+function PN(i){return VIS().indexOf(i)+1}
+function PT(){return VIS().length}
 function frame(i,inner,cls){
   const s=D.slides[i]||{};
-  return `<section class="slide ${cls||''}" data-i="${i}" aria-roledescription="slide" aria-label="${i+1} / ${D.slides.length}">${inner}
-  <footer class="sf"><span>${esc(D.meta.disclaimer)}</span><span>출처: ${esc(D.meta.source)}</span><span class="pg">${String(i+1).padStart(2,'0')} / ${String(D.slides.length).padStart(2,'0')}</span></footer></section>`;
+  return `<section class="slide ${cls||''}" data-i="${i}" aria-roledescription="slide" aria-label="${PN(i)} / ${PT()}">${inner}
+  <footer class="sf"><span>${esc(D.meta.disclaimer)}</span><span>출처: ${esc(D.meta.source)}</span><span class="pg">${String(PN(i)).padStart(2,'0')} / ${String(PT()).padStart(2,'0')}</span></footer></section>`;
 }
 function head(i){
   const s=D.slides[i]||{};
-  return `${s.kicker?`<div class="kicker"><b>${String(i+1).padStart(2,'0')}</b>${esc(s.kicker)}</div>`:''}<h1 class="hl">${s.headline||''}</h1>${s.sub?`<p class="sub">${s.sub}</p>`:''}`;
+  return `${s.kicker?`<div class="kicker"><b>${String(PN(i)).padStart(2,'0')}</b>${esc(s.kicker)}</div>`:''}<h1 class="hl">${s.headline||''}</h1>${s.sub?`<p class="sub">${s.sub}</p>`:''}`;
 }
 
 /* ---------- 각 슬라이드 ---------- */
@@ -744,7 +831,7 @@ R[0]=i=>{
   return frame(i,`<div class="cover-wrap"><div class="rule"></div><div class="eyebrow">${esc(s.kicker||'')}</div>
   <h1>${esc(m.title)}</h1><p class="subt">${esc(m.subtitle)}</p>
   <div class="meta badges">${m.audience?`<span class="bdg">${esc(m.audience)}</span>`:''}${m.asOf?`<span class="bdg">${esc(m.asOf)} · 수시 발표 진행 중</span>`:''}${m.date?`<span class="bdg">${esc(m.date)}</span>`:''}${m.presenter?`<span class="bdg">${esc(m.presenter)}</span>`:''}</div></div>
-  <div class="big" aria-hidden="true">2027</div>`,'dark cover');
+  <div class="cbg" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i><div class="big ghost"><span>2</span><span>0</span><span>2</span><span>7</span></div><div class="big"><span>2</span><span>0</span><span>2</span><span>7</span></div><div class="sweep"></div></div>`,'dark cover');
 };
 R[1]=i=>{
   const st=D.slides[i].steps||[];
@@ -878,10 +965,13 @@ R[6]=i=>{
     return {major:mj.state==='ok'?mj.value:null, all:ac&&ac.totalStatus==='확정'&&isNum(ac.totalAll)?ac.totalAll:null};
   };
   const ta=tot(A), tb=tot(B);
+  /* 주요 = 표에 보이는 대학 합계, 전체 = 데이터(또는 bAll로 지정) */
+  ta.major=rows.reduce((s,r)=>s+(+r[1]||0),0); tb.major=rows.reduce((s,r)=>s+(+r[2]||0),0);
+  if(c.aAll!=null)ta.all=c.aAll; if(c.bAll!=null)tb.all=c.bAll;
   const side=(v,k,cls)=>{const n=+v||0;return `<div class="cc ${cls}${n?'':' zero'}"><b>${n}</b><div class="ctrack"><div class="bar" style="--w:${(n/max*100).toFixed(1)}%;--d:${(k*0.06).toFixed(2)}s"></div></div></div>`};
   const hd=(name,t,cls)=>`<div class="vhead ${cls}"><b>${esc(name)}</b><span>주요 <em>${t.major==null?'—':t.major}</em>건 · 전체 <em>${t.all==null?'—':t.all}</em>건</span></div>`;
   const body=`<div class="panel vs">
-    <div class="vtop">${hd(A,ta,'a')}<span class="vmid">대학</span>${hd(B,tb,'b')}</div>
+    <div class="vtop">${hd(A,ta,'a')}<span class="vmid">대학</span>${hd(c.bLabel||B,tb,'b')}</div>
     <div class="vrows">${rows.map((r,k)=>`<div class="brow">${side(r[1],k,'va')}<div class="vu">${esc(r[0])}</div>${side(r[2],k,'vb')}</div>`).join('')}</div>
   </div>
   <p class="note-line" style="margin:10px 0 14px">${esc(c.note||'')}</p>`;
@@ -950,20 +1040,77 @@ R[9]=i=>{
 };
 R[10]=i=>{
   const s=D.slides[i];
-  return frame(i,`<div class="close-wrap"><div class="kicker"><b>${String(i+1).padStart(2,'0')}</b>${esc(s.kicker||'')}</div><h1>${s.headline}</h1><p class="sub">${s.sub||''}</p>
+  return frame(i,`<div class="close-wrap"><div class="kicker"><b>${String(PN(i)).padStart(2,'0')}</b>${esc(s.kicker||'')}</div><h1>${s.headline}</h1><p class="sub">${s.sub||''}</p>
   <div class="picks">${(s.picks||[]).map((p,k)=>`<div class="pick"><div class="n">예시 ${k+1}</div><p>${esc(p)}</p></div>`).join('')}</div>
   <div class="writein"><span>다음 주까지 나의 한 가지</span><span class="ln"></span></div></div>`,'dark');
+};
+
+R[11]=i=>{
+  /* 누적 합격 발표 — 큰 숫자 하나를 0부터 카운트업 (3장 결과 발표와 같은 연출) */
+  const s=D.slides[i], v=isNum(s.count)?s.count:null;
+  const num=v==null?`<b class="hb">—</b>`:`<b class="hb" data-to="${v}" style="min-width:${String(v).length*0.62}em">${v}</b>`;
+  /* 배경: 다른 대학 누적 합격 막대(옅게) — s.others 가 없으면 장식용 막대 */
+  const others=(s.others||[]).filter(o=>has(o[0])&&isNum(o[1])).slice().sort((p,q)=>p[1]-q[1]);
+  const x0=70, x1=1530, base=840;
+  let bars='', pts='', labels='', last=[x1,base];
+  if(others.length){
+    /* 가운데(큰 숫자) 자리는 비우고 왼쪽·오른쪽에 나눠 배치 */
+    const n=others.length, half=Math.ceil(n/2), gap=26, mx=Math.max(...others.map(o=>o[1])), H=360;
+    const geo=others.map((o,k)=>{const L=k<half, st=L?70:1150, en=L?450:1530, cnt=L?half:n-half, idx=L?k:k-half, w=(en-st-gap*(cnt-1))/cnt; return {x:st+idx*(w+gap), w, hh:40+o[1]/mx*H, o, k}});
+    const bw=geo[0].w;
+    bars=geo.map(g=>`<rect class="hbar" x="${g.x.toFixed(1)}" y="${(base-g.hh).toFixed(1)}" width="${g.w.toFixed(1)}" height="${g.hh.toFixed(1)}" rx="8" style="--t:${(g.k/n*0.55).toFixed(3)};fill:url(#hgGrad2)"/>`).join('');
+    labels=geo.map(g=>`<text class="hlab" x="${(g.x+g.w/2).toFixed(1)}" y="${(base-g.hh-46).toFixed(1)}" text-anchor="middle" style="--t:${(g.k/n*0.55).toFixed(3)}"><tspan class="hlu" x="${(g.x+g.w/2).toFixed(1)}">${esc(g.o[0])}</tspan><tspan class="hln" x="${(g.x+g.w/2).toFixed(1)}" dy="28">${g.o[1]}명</tspan></text>`).join('');
+    pts='';
+  }else{
+    const N=30, bw=(x1-x0)/N;
+    const hts=[...Array(N)].map((_,k)=>{const t=k/(N-1);return 50+Math.pow(t,1.35)*380+Math.sin(k*2.3)*16*(1-t*.6)});
+    bars=hts.map((hh,k)=>`<rect class="hbar" x="${(x0+k*bw+bw*.18).toFixed(1)}" y="${(base-hh).toFixed(1)}" width="${(bw*.64).toFixed(1)}" height="${hh.toFixed(1)}" rx="4" style="--t:${(k/N*0.55).toFixed(3)};fill:url(#hgGrad2)"/>`).join('');
+    pts=hts.map((hh,k)=>`${(x0+k*bw+bw/2).toFixed(1)},${(base-hh-26).toFixed(1)}`).join(' ');
+  }
+  last=pts?pts.split(' ').pop().split(','):[-50,-50];
+  const graph=`<svg class="hgraph" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+    <defs><linearGradient id="hgGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2997FF" stop-opacity=".9"/><stop offset="1" stop-color="#0071E3" stop-opacity=".08"/></linearGradient></defs>
+    <g class="hbars">${bars}</g>${labels}
+    <polyline class="hline" points="${pts}" pathLength="1"/>
+    <circle class="hdot" cx="${last[0]}" cy="${last[1]}" r="9"/>  </svg><div class="hveil" aria-hidden="true"></div>`;
+  return frame(i,`${graph}<div class="hero">
+    <div class="hk">${esc(s.kicker||'')}</div>
+    <div class="hnum">${num}<span>${esc(s.unit||'명')}</span></div>
+    <div class="hl1">${esc(s.heroLabel||'')}</div>
+    ${s.range?`<div class="hsub"><span>${esc(s.range)}</span></div>`:''}
+    ${s.foot?`<div class="hasof">${esc(s.foot)}</div>`:''}
+  </div>`,'herosl herolight');
+};
+
+R[12]=i=>{
+  /* 9등급제 → 5등급제 환산 (누적 비율 기준, 참고용) */
+  const s=D.slides[i];
+  const nine=s.nine||[4,11,23,40,60,77,89,96,100], five=s.five||[10,34,66,90,100];
+  const band=(cum,cls,label)=>{let prev=0;return `<div class="cvrow ${cls}"><div class="cvname">${label}</div><div class="cvbar">${cum.map((c,k)=>{const w=c-prev, st=prev;prev=c;return `<div class="cvseg" style="left:${st}%;width:${w}%;--k:${k}"><b>${k+1}</b><span>~${c}%</span></div>`}).join('')}</div></div>`};
+  const ticks=[0,10,20,30,40,50,60,70,80,90,100].map(t=>`<span style="left:${t}%">${t}%</span>`).join('');
+  const rows=(s.rows||[]).map((r,k)=>`<tr${k===1?' class="hi"':''}><td class="g5"><b>${esc(r[0])}</b></td><td class="pc">${esc(r[1])}</td><td class="g9">${esc(r[2])}</td></tr>`).join('');
+  return frame(i,head(i)+`<div class="body">
+    <div class="panel cvpanel">
+      <div class="cvaxis"><span class="cvtitle">상위 누적 비율</span><div class="cvticks">${ticks}</div></div>
+      ${band(nine,'n9','9등급제<small>선배들</small>')}
+      ${band(five,'n5','5등급제<small>여러분</small>')}
+    </div>
+    <div class="cvbottom">
+      <table class="cvtable"><thead><tr><th>5등급제</th><th>상위 비율</th><th>9등급제로는 대략</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="cvcall"><small>예를 들면</small><p>${s.callout||''}</p><em>${esc(s.caveat||'')}</em></div>
+    </div>
+  </div>`);
 };
 
 /* ---------- 렌더 ---------- */
 function render(){
   const n=D.slides.length;
   let h='';
-  for(let i=0;i<n;i++){
+  for(const i of VIS()){
     const fn=R[i]||(k=>frame(k,head(k)));
     h+=fn(i);
     const s=D.slides[i]||{};
-    h+=`<section class="notes-page"><h2>${String(i+1).padStart(2,'0')}. ${esc((s.headline||D.meta.title).replace(/<[^>]+>/g,''))}</h2><div class="k">발표자 노트</div><p>${esc(s.notes||'')}</p></section>`;
+    h+=`<section class="notes-page"><h2>${String(PN(i)).padStart(2,'0')}. ${esc((s.headline||D.meta.title).replace(/<[^>]+>/g,''))}</h2><div class="k">발표자 노트</div><p>${esc(s.notes||'')}</p></section>`;
   }
   $('#slides').innerHTML=h;
   show(cur,false);
@@ -980,7 +1127,7 @@ function show(i,animate){
   barCount(el,animate!==false);
   $('#pgx').textContent=`${cur+1} / ${els.length}`;
   $('#progress').style.width=((cur+1)/els.length*100)+'%';
-  const s=D.slides[cur]||{};
+  const s=D.slides[VIS()[cur]]||{};
   $('#notes').innerHTML=`<h5>발표자 노트 · ${cur+1}/${els.length}</h5>${esc(s.notes||'(노트 없음)').replace(/\n/g,'<br>')}`;
   try{history.replaceState(null,'','#'+(cur+1))}catch(e){}
 }
@@ -1289,7 +1436,7 @@ function init(){
     const k=e.key;
     if(k==='ArrowRight'||k==='PageDown'||k===' '){e.preventDefault();go(1)}
     else if(k==='ArrowLeft'||k==='PageUp'){e.preventDefault();go(-1)}
-    else if(k==='Home')show(0,true);else if(k==='End')show(D.slides.length-1,true);
+    else if(k==='Home')show(0,true);else if(k==='End')show(PT()-1,true);
     else if(k==='f'||k==='F')toggleFs();
     else if((k==='n'||k==='N')&&!document.body.classList.contains('share'))$('#btnNotes').click();
     else if((k==='e'||k==='E')&&!document.body.classList.contains('share'))openEd();
@@ -1341,8 +1488,10 @@ const DATA = {
     subtitle: '지금부터 준비할 실기와 내신',
     audience: '대상: 고1·고2 준입시반',
     date: '',                  // 예: '2026. 11. 30.'
-    presenter: '',             // 예: '목우미술학원 입시상담실'
+    presenter: '제작 · 동탄목우 고2반 송준석',
     homeAcademy: '목우',
+    /* 슬라이드 보여 주는 순서 (slides 배열의 번호, 0부터). '흔들리지 않기'(4)를 '인근 학원 비교'(6) 뒤로 옮김 */
+    order: [0, 1, 2, 3, 5, 11, 6, 4, 12, 7, 8, 9, 10],   /* 11 = 경희대 누적 합격, 12 = 9→5등급 환산표 */
     /* 대학 표시 순서 (5장 막대·포스터, 6장 비교). 비워 두면 합격 건수 많은 순. 예: ['한양대','중앙대','경희대', …] */
     uniOrder: [],
     asOf: '2026. 11. 26. 기준',   // 표지·결과 발표 장에 표시되는 기준 시점 (수시 발표 진행 중)
@@ -1359,11 +1508,11 @@ const DATA = {
   /* 원자료 이미지 — HTML과 같은 폴더의 파일. (반별 비교·인원 대비 비율 이미지는 사용하지 않음) */
   images: [
     { id: 'img1', file: 'KakaoTalk_20261124_155604151.jpg',    label: '학원별 주요대학·전체 합격 건수 표', basis: 'B1' },
-    { id: 'img2', file: 'KakaoTalk_20261124_155604151_01.jpg', label: '목우·천년의 미소 대학별 비교 표', basis: 'B2' },
-    { id: 'img3', file: 'KakaoTalk_20261124_155604151_02.jpg', label: '천년의 미소 게시물 정리 1 (반 단위)', basis: 'B1' },
-    { id: 'img4', file: 'KakaoTalk_20261124_155604151_03.jpg', label: '천년의 미소 게시물 정리 2 (반 단위)', basis: 'B1' },
-    { id: 'img5', file: 'KakaoTalk_20261124_155604151_07.jpg', label: '목우·동탄 C&C 합계 비교', basis: 'B1' },
-    { id: 'img6', file: 'KakaoTalk_20261124_155604151_08.jpg', label: '목우·동탄 C&C 대학별 비교', basis: 'B2' },
+    { id: 'img2', file: 'KakaoTalk_20261124_155604151_01.jpg', label: '목우·서울 ㅊ학원 대학별 비교 표', basis: 'B2' },
+    { id: 'img3', file: 'KakaoTalk_20261124_155604151_02.jpg', label: '서울 ㅊ학원 게시물 정리 1 (반 단위)', basis: 'B1' },
+    { id: 'img4', file: 'KakaoTalk_20261124_155604151_03.jpg', label: '서울 ㅊ학원 게시물 정리 2 (반 단위)', basis: 'B1' },
+    { id: 'img5', file: 'KakaoTalk_20261124_155604151_07.jpg', label: '목우·동탄 C학원 합계 비교', basis: 'B1' },
+    { id: 'img6', file: 'KakaoTalk_20261124_155604151_08.jpg', label: '목우·동탄 C학원 대학별 비교', basis: 'B2' },
     { id: 'img7', file: 'KakaoTalk_20261124_155604151_09.jpg', label: '목우·수원/북수원 통합 합계 비교', basis: 'B1' },
     { id: 'img8', file: 'KakaoTalk_20261124_155604151_10.jpg', label: '목우·수원/북수원 통합 대학별 비교', basis: 'B2' },
     { id: 'img9', file: 'KakaoTalk_20261124_155604151_11.jpg', label: '타 학원 대학별 실적 (일부 반 단위)', basis: 'B1' }
@@ -1382,14 +1531,14 @@ const DATA = {
   /* 학원 — 학원명만. totalAll = 원자료 '전체' 합격 건수 (반 단위 자료는 비워 둠) */
   academies: [
     { name: '목우',          totalAll: 101,  totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 86건 + 경희대 10건 + 상명대 5건(2026. 11. 26. 사용자 전달)' },
-    { name: '천년의 미소 본원',totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', tag: '경희대 추정 포함', note: '원자료에 전체 합격 칸이 비어 있음. 경희대는 본원 9명 추정' },
-    { name: '대구 상인클라우드', totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료에 전체 합격 칸이 비어 있음' },
-    { name: '동탄 C&C',      totalAll: 53,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
-    { name: '평택 웨이브',     totalAll: 26,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
-    { name: '향남 아이엠',     totalAll: 30,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
-    { name: '미금 바우하우스',  totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '이미지9에서 특정 반 실적으로 표기 — 학원 전체 여부 확인 필요' },
-    { name: '수원 Hi5',      totalAll: 11,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. Hi5 소속 (사용자 확인)' },
-    { name: '북수원 Hi5',     totalAll: 30,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. Hi5 소속 (사용자 확인)' }
+    { name: '서울 ㅊ학원',totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', tag: '경희대 추정 포함', note: '원자료에 전체 합격 칸이 비어 있음. 경희대는 본원 9명 추정' },
+    { name: '대구 ㅅ학원', totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료에 전체 합격 칸이 비어 있음' },
+    { name: '동탄 C학원',      totalAll: 57,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
+    { name: '평택 ㅇ학원',     totalAll: 26,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
+    { name: '향남 ㅇ학원',     totalAll: 30,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '' },
+    { name: '미금 ㅂ학원',  totalAll: null, totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '이미지9에서 특정 반 실적으로 표기 — 학원 전체 여부 확인 필요' },
+    { name: '수원 H학원',      totalAll: 11,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. H학원 소속 (사용자 확인)' },
+    { name: '북수원 H학원',     totalAll: 30,   totalStatus: '확정', size: null, sizeStatus: '확인 필요', note: '원자료 표기가 반 단위. H학원 소속 (사용자 확인)' }
   ],
 
   /* 합격 기록 — 원자료에 인쇄된 숫자만. 손글씨 메모는 사용하지 않음 */
@@ -1397,26 +1546,27 @@ const DATA = {
     /* B1: 학원별 주요대학 합격 건수 (이미지1) */
     { academy: '목우', university: '주요대학 합계', track: '', dept: '', count: 53, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
     { academy: '목우', university: '경희대 (추가)', track: '', dept: '', count: 10, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '2026. 11. 26. 발표분 사용자 전달 — 원자료 표 이후 추가' },
-    { academy: '천년의 미소 본원', university: '주요대학 합계', track: '', dept: '', count: 43, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '본원(서초·강남 합산) 실적 — 사용자 확인' },
-    { academy: '대구 상인클라우드', university: '주요대학 합계', track: '', dept: '', count: 24, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
-    { academy: '동탄 C&C', university: '주요대학 합계', track: '', dept: '', count: 24, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
-    { academy: '평택 웨이브', university: '주요대학 합계', track: '', dept: '', count: 19, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
-    { academy: '향남 아이엠', university: '주요대학 합계', track: '', dept: '', count: 16, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
-    { academy: '미금 바우하우스', university: '주요대학 합계', track: '', dept: '', count: 14, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '이미지9에서 반 단위 실적으로 표기' },
-    { academy: '수원 Hi5', university: '주요대학 합계', track: '', dept: '', count: 7, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '원자료 행 이름이 반 단위' },
-    { academy: '북수원 Hi5', university: '주요대학 합계', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '원자료 행 이름이 반 단위' },
+    { academy: '서울 ㅊ학원', university: '주요대학 합계', track: '', dept: '', count: 43, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '본원(서초·강남 합산) 실적 — 사용자 확인' },
+    { academy: '대구 ㅅ학원', university: '주요대학 합계', track: '', dept: '', count: 24, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
+    { academy: '동탄 C학원', university: '주요대학 합계', track: '', dept: '', count: 19,   /* 원자료 24 − 성신·인하·삼육 5 (주요대학 범위를 목우 기준에 맞춤) */ kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
+    { academy: '평택 ㅇ학원', university: '주요대학 합계', track: '', dept: '', count: 19, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
+    { academy: '향남 ㅇ학원', university: '주요대학 합계', track: '', dept: '', count: 16, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: 'img1', status: '확정', note: '' },
+    { academy: '미금 ㅂ학원', university: '주요대학 합계', track: '', dept: '', count: 14, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '이미지9에서 반 단위 실적으로 표기' },
+    { academy: '수원 H학원', university: '주요대학 합계', track: '', dept: '', count: 7, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '원자료 행 이름이 반 단위' },
+    { academy: '북수원 H학원', university: '주요대학 합계', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: 'img1', status: '확정', note: '원자료 행 이름이 반 단위' },
 
     /* 2026. 11. 26. 사용자 전달 추가분 — 경희대·상명대 (상명대는 주요대학으로 분류, 전체 합격에도 더함) */
     { academy: '목우', university: '상명대 (추가)', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '천년의 미소 본원', university: '경희대 (추가)', track: '', dept: '', count: 9, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '전체 15명 중 본원 9명 추정 (나머지는 다른 캠퍼스로 보임) — 사용자 전달' },
-    { academy: '천년의 미소 본원', university: '상명대 (추가)', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '동탄 C&C', university: '상명대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '향남 아이엠', university: '경희대 (추가)', track: '', dept: '', count: 2, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '향남 아이엠', university: '상명대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '미금 바우하우스', university: '경희대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '수원 Hi5', university: '상명대 (추가)', track: '', dept: '', count: 4, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '북수원 Hi5', university: '경희대 (추가)', track: '', dept: '', count: 1, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
-    { academy: '북수원 Hi5', university: '상명대 (추가)', track: '', dept: '', count: 1, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '서울 ㅊ학원', university: '경희대 (추가)', track: '', dept: '', count: 9, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '전체 15명 중 본원 9명 추정 (나머지는 다른 캠퍼스로 보임) — 사용자 전달' },
+    { academy: '서울 ㅊ학원', university: '상명대 (추가)', track: '', dept: '', count: 5, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '동탄 C학원', university: '수원대 (추가)', track: '', dept: '', count: 4, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '동탄 C학원', university: '상명대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '향남 ㅇ학원', university: '경희대 (추가)', track: '', dept: '', count: 2, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '향남 ㅇ학원', university: '상명대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '미금 ㅂ학원', university: '경희대 (추가)', track: '', dept: '', count: 3, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '수원 H학원', university: '상명대 (추가)', track: '', dept: '', count: 4, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '북수원 H학원', university: '경희대 (추가)', track: '', dept: '', count: 1, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
+    { academy: '북수원 H학원', university: '상명대 (추가)', track: '', dept: '', count: 1, kind: '자료에서 구분되지 않음', basis: 'B1', unit: '학원 전체', mergeOk: '확인', image: '', status: '확정', note: '사용자 전달' },
 
     /* B2: 목우 대학별 (이미지2·6·8 공통, 합계 53) */
     { academy: '목우', university: '경희대',   track: '', dept: '', count: 10, kind: '자료에서 구분되지 않음', basis: 'B2', unit: '학원 전체', mergeOk: '미확인', image: '', status: '확정', note: '2026. 11. 26. 발표분 사용자 전달' },
@@ -1474,29 +1624,30 @@ const DATA = {
     { kicker: '오늘의 순서', headline: '올해 <em>목우</em>는 어디까지 왔을까요?',
       sub: '올해 수시 결과를 숫자로 확인하고, 선배들의 내신 이야기를 거쳐 여러분의 고1·고2 준비로 이어갑니다.',
       steps: [
-        { t: '학원별 결과', d: '여러 학원의 공개 자료를 한 표에 모아 목우의 위치를 확인합니다.' },
-        { t: '목우 대학별 결과', d: '목우의 주요대학 합격이 어느 대학에서 나왔는지 봅니다.' },
+        { t: '목우 결과', d: '올해 목우의 수시 합격 숫자를 0부터 함께 확인합니다.' },
+        { t: '대학별 결과', d: '어느 대학에서 나왔는지, 인근 학원과도 나란히 봅니다.' },
         { t: '내신과 지금의 준비', d: '선배들의 내신과 대학별 지원 가능 내신을 보고, 지금 할 일을 정합니다.' }
       ],
       notes: '오늘은 목우의 결과를 자신 있게 보여주는 자리입니다. 다른 학원을 평가하는 자리는 아니라는 점을 짧게 말하고 시작해 주세요.' },
     { kicker: '2027학년도 수시 · 목우미술학원', headline: '', sub: '', heroLabel: '전체 합격', heroSub: '주요대학 합격',
-      notes: '숫자가 다 올라갈 때까지 잠깐 기다렸다가 말해 주세요. 2026년 11월 26일 기준이고, 수시 발표가 아직 남아 있어 숫자는 더 늘어날 수 있다고 꼭 덧붙여 주세요.\n올해 목우는 수시에서 전체 101건, 그중 주요대학 68건의 합격을 만들었습니다. 오늘 발표된 경희대 10건과 상명대 5건까지 포함한 숫자입니다.\n이제 이 숫자가 다른 학원과 비교하면 어느 정도인지, 그리고 어느 대학에서 나왔는지 차례로 보겠습니다.' },    { kicker: '학원별 입결', headline: '한 표에 모아 보면, <em>목우의 결과</em>가 보입니다.',
+      notes: '숫자가 다 올라갈 때까지 잠깐 기다렸다가 말해 주세요. 2026년 11월 26일 기준이고, 수시 발표가 아직 남아 있어 숫자는 더 늘어날 수 있다고 꼭 덧붙여 주세요.\n올해 목우는 수시에서 전체 101건, 그중 주요대학 68건의 합격을 만들었습니다. 오늘 발표된 경희대 10건과 상명대 5건까지 포함한 숫자입니다.\n이제 이 숫자가 다른 학원과 비교하면 어느 정도인지, 그리고 어느 대학에서 나왔는지 차례로 보겠습니다.' },    { hidden: false,  /* true로 바꾸면 이 장(학원별 입결)을 숨김 */
+      kicker: '학원별 입결', headline: '한 표에 모아 보면, <em>목우의 결과</em>가 보입니다.',
       sub: '학원별로 공개된 주요대학 합격과 전체 합격 건수를 한 표에 모았습니다.',
-      notes: '공개된 자료를 같은 표에 모았을 뿐, 다른 학원을 평가하려는 장이 아닙니다.\n천년의 미소는 서초·강남을 합친 본원 실적입니다. 경희대는 전체 15명 중 본원 9명으로 추정해 넣었습니다.\n오늘 발표된 경희대·상명대 합격은 학원마다 전달받은 숫자를 주요·전체에 함께 더했습니다.\n합격 건수는 학생 수가 아니므로 “합격률”로 말하지 않습니다.' },
+      notes: '공개된 자료를 같은 표에 모았을 뿐, 다른 학원을 평가하려는 장이 아닙니다.\n서울 ㅊ학원는 서초·강남을 합친 본원 실적입니다. 경희대는 전체 15명 중 본원 9명으로 추정해 넣었습니다.\n오늘 발표된 경희대·상명대 합격은 학원마다 전달받은 숫자를 주요·전체에 함께 더했습니다.\n합격 건수는 학생 수가 아니므로 “합격률”로 말하지 않습니다.' },
     { kicker: '흔들리지 않기', headline: '합격 숫자에 <em>흔들리지 마세요</em>.',
       sub: '그저 숫자일 뿐, 알고 보면 다른 숫자입니다. 비교보다 나 자신을 믿고 가면 됩니다.',
       adcases: [
+        { t: '지방 캠퍼스까지 합산', ad: '40', adUnit: '명', real: '12', realUnit: '명', realLabel: '본원',
+          d: '대형 프랜차이즈 학원은 본원이 아닌 지방 캠퍼스 합격까지 합쳐 주요대학 숫자를 크게 보이게 하기도 합니다.' },
         { t: '예비 번호를 합격으로', ad: '5', adUnit: '명', real: '2', realUnit: '명', realLabel: '최초 합격',
-          d: '최초합 2명 + 예비 3명. 작년엔 예비 2번까지만 빠졌는데, 예비 전원을 합격으로 셌습니다.' },
-        { t: '1차(배수) 통과를 합격으로', ad: '8', adUnit: '명', real: '3', realUnit: '명', realLabel: '최종 합격',
-          d: '실기 배수 전형 1단계 통과 8명 중 최종 합격은 3명. 1차 통과는 아직 합격이 아닙니다.' },
-        { t: '중복 합격으로 부풀리기', ad: '12', adUnit: '건', real: '5', realUnit: '명', realLabel: '학생 수',
-          d: '학생 5명이 여러 대학에 붙은 것을 각각 셌습니다. 합격 건수와 합격한 학생 수는 다릅니다.' },
-        { t: '여러 지점·캠퍼스 합산', ad: '40', adUnit: '명', real: '12', realUnit: '명', realLabel: '내가 다닐 지점',
-          d: '여러 지점 합계 40명 중 내가 다닐 지점은 12명. 다른 캠퍼스 숫자까지 합친 것입니다.' }
+          d: '예비 합격은 작은 글씨로 적어 두곤 합니다. 작년 추합 번호 안이면 괜찮지만, 그 밖의 번호까지 넣기도 합니다.' },
+        { t: '배수 전형 1차를 합격으로', ad: '8', adUnit: '명', real: '3', realUnit: '명', realLabel: '최종 합격',
+          d: '배수 전형 1차(1단계) 통과를 “합격”으로 홍보하기도 합니다. 1차는 아직 시험 중입니다.' },
+        { t: '학종 합격까지 합산', ad: '15', adUnit: '명', real: '9', realUnit: '명', realLabel: '실기 합격',
+          d: '실기가 아닌 학생부종합 전형 합격까지 학원 합격자 수에 넣기도 합니다. (홍익대는 실기 없는 학종이라 예외)' }
       ],
-      checks: ['최종 합격인가?', '학생 수인가, 건수인가?', '어느 지점의 숫자인가?'],
-      notes: '이 장의 메시지는 “주변에 혹하지 말고, 나 자신을 믿자”입니다. 광고에 크게 적힌 숫자를 보면 “저 학원이 더 잘하나?” 싶어 흔들릴 수 있지만, 숫자는 세는 방법에 따라 얼마든지 커 보일 수 있습니다. 특정 학원을 비난하는 게 아니라, 흔들리지 않을 기준을 주는 장입니다.\n카드의 숫자는 모두 이해를 돕기 위한 예시입니다. 실제 학원의 숫자가 아니라는 점을 말해 주세요.\n① 예비 번호: 작년에 그 번호까지 빠지지 않았다면 합격 가능성이 낮습니다. ② 배수 전형 1차 통과: 최종 합격이 아닙니다. ③ 중복 합격: 한 학생이 3곳 붙으면 3건입니다. ④ 지점 합산: 내가 다닐 지점의 숫자를 따로 물어보세요.\n참고: 목우 합격 포스터 하단에도 “작년 합격 기준 예비합격생 포함”이라고 기준을 적고 있습니다. 질문이 나오면, 어떤 학원이든 이렇게 기준을 함께 적었는지 확인하면 된다고 답해 주세요.\n마무리 멘트: 다른 곳 숫자에 마음이 흔들릴 때는, 지금까지 내가 그려 온 그림과 쌓아 온 노력을 믿고 가자.' },
+      checks: ['어느 지점·캠퍼스 숫자인가?', '예비·1차가 아닌 최종 합격인가?', '실기 전형 합격인가?'],
+      notes: '이 장의 메시지는 “주변에 혹하지 말고, 나 자신을 믿자”입니다. 광고에 크게 적힌 숫자를 보면 “저 학원이 더 잘하나?” 싶어 흔들릴 수 있지만, 숫자는 세는 방법에 따라 얼마든지 커 보일 수 있습니다. 특정 학원을 비난하는 게 아니라, 흔들리지 않을 기준을 주는 장입니다.\n카드의 숫자는 모두 이해를 돕기 위한 예시입니다. 실제 학원의 숫자가 아니라는 점을 말해 주세요.\n① 지방 캠퍼스 합산: 대형 프랜차이즈는 본원이 아닌 지방 캠퍼스 합격까지 합쳐 주요대학 숫자를 키우기도 합니다. 내가 다닐 곳의 숫자를 따로 물어보세요. ② 예비 번호: 작은 글씨로 적힌 예비는 작년 추합 번호 안이면 괜찮지만, 그 밖의 번호까지 넣기도 합니다. ③ 배수 전형 1차: 1차(1단계) 통과를 합격으로 홍보하기도 하지만, 최종 합격이 아닙니다.\n참고: 목우 합격 포스터 하단에도 “작년 합격 기준 예비합격생 포함”이라고 기준을 적고 있습니다. 질문이 나오면, 어떤 학원이든 이렇게 기준을 함께 적었는지 확인하면 된다고 답해 주세요.\n마무리 멘트: 다른 곳 숫자에 마음이 흔들릴 때는, 지금까지 내가 그려 온 그림과 쌓아 온 노력을 믿고 가자.' },
     { kicker: '목우 대학별 결과', headline: '목우의 주요대학 합격, <em>{대학수}개 대학</em>에서 나왔습니다.',
       sub: '주요대학 <em>{합계}건</em>  /  전체 합격 <em>{전체}건</em>',
       /* 목우 2027학년도 합격 포스터 (썸네일, 한양대 포스터의 학생 이름·고교는 가림) — 통계에는 영향 없음 */
@@ -1521,15 +1672,15 @@ const DATA = {
     { kicker: '인근 학원과 함께 보기', headline: '인근 학원과 나란히 봐도, <em>목우가 앞섭니다</em>',
       sub: '같은 기준(2026. 11. 26.)으로 가까운 지역 학원과 대학별 합격 건수를 나란히 놓았습니다.',
       compare: {
-        a: '목우', b: '동탄 C&C',
+        a: '목우', b: '동탄 C학원',   /* 전체 합격은 학원 데이터(57)에서 가져옴 */
         rows: [
           ['경기대', 19, 3], ['경희대', 10, 0], ['동덕여대', 7, 5], ['한성대', 7, 3], ['가천대', 6, 5],
-          ['수원대', 5, 0], ['상명대', 5, 3], ['추계예대', 4, 0], ['중앙대', 2, 0], ['숙명여대', 1, 1],
-          ['한양대', 1, 2], ['서울과기대', 1, 0], ['성신여대', 0, 1], ['인하대', 0, 2], ['삼육대', 0, 2]
+          ['수원대', 5, 4], ['상명대', 5, 3], ['추계예대', 4, 0], ['중앙대', 2, 0], ['숙명여대', 1, 1],
+          ['한양대', 1, 2], ['서울과기대', 1, 0]
         ],
-        note: '원자료: 목우·동탄 C&C 대학별 비교 표 + 2026. 11. 26. 추가분(경희대·상명대).'
+        note: '원자료: 학원별 대학 비교 표 + 2026. 11. 26. 추가분(경희대·상명대·수원대). 주요 = 표에 있는 대학 합계.'
       },
-      notes: '우리 학원 가까이에 있는 학원과 같은 기준으로 나란히 놓은 장입니다. 다른 학원을 깎아내리기보다, 숫자로 목우가 앞선다는 것만 담담하게 보여 주세요.\n목우는 주요대학 68건·전체 101건, 동탄 C&C는 주요대학 27건·전체 53건입니다. 경기대(19 대 3), 경희대(10 대 0)처럼 목우에서 많이 나온 대학이 눈에 띕니다.\n동탄 C&C 경희대 합격은 0건입니다(확인됨). 숫자가 바뀌면 DATA의 compare.rows에서 고치면 됩니다.' },    { kicker: '선배들의 내신', headline: '내신은 <em>티켓</em>, 합격은 <em>실기</em>가 만듭니다.',
+      notes: '우리 학원 가까이에 있는 학원과 같은 기준으로 나란히 놓은 장입니다. 다른 학원을 깎아내리기보다, 숫자로 목우가 앞선다는 것만 담담하게 보여 주세요.\n목우는 주요대학 68건·전체 101건, 비교 학원은 표의 주요대학 26건·전체 57건입니다. 학원 이름은 화면에 ○○○로 가렸습니다. 경기대(19 대 3), 경희대(10 대 0)처럼 목우에서 많이 나온 대학이 눈에 띕니다.\n비교 학원의 경희대 합격은 0건(확인됨), 수원대는 4건입니다. 숫자가 바뀌면 DATA의 compare.rows에서 고치면 됩니다.' },    { kicker: '선배들의 내신', headline: '내신은 <em>티켓</em>, 합격은 <em>실기</em>가 만듭니다.',
       sub: '4~5등급대 내신으로도 주요대학 합격. 내신까지 갖추면 선택지가 더 넓어집니다.',
       notes: '이 장의 메시지는 두 가지입니다. 내신은 원서를 쓸 수 있는 티켓이고, 합격은 실기가 만듭니다.\n자랑할 부분: 목우 선배들은 내신이 높지 않았습니다. 2026학년도 합격생 133명 중 3등급 이내는 16명(약 12%)뿐이고, 절반 이상이 4~5등급대였습니다. 그런데도 경기대(합격생 평균 5.12등급), 동덕여대(4.44등급), 단국대(4.40등급) 같은 대학에 합격했습니다. 이건 목우의 실기 지도가 만든 결과입니다.\n그래서 여러분에게 하고 싶은 말: 실기는 목우가 끝까지 끌어올립니다. 여기에 내신까지 갖추면 숙명여대·홍익대·한양대(평균 2.9~3.1등급)처럼 더 위쪽 대학에도 원서를 쓰고 실기로 승부할 수 있습니다. 목우는 내신으로 원서 자격을 먼저 갖추고 실기로 승부하는 방식으로 입시를 진행합니다.\n표의 평균 내신은 2024~2026학년도 목우 수시 합격자 기준(9등급제)입니다. 여러분은 5등급제라 그대로 옮기지 말고 수준을 가늠하는 용도로만 설명해 주세요. 한양대 서울·ERICA는 합격 건수가 적어 참고용입니다.' },
     { kicker: '지금부터 준비할 것', headline: '고1·고2는 <em>실기와 내신</em>을 함께 키우는 시간입니다.',
@@ -1580,7 +1731,28 @@ const DATA = {
         '오늘 그린 그림으로 그림일기 첫 장 쓰기',
         '지난 학기 성적표를 꺼내 과목별 등급 적어 보기'
       ],
-      notes: '학생들에게 30초 정도 시간을 주고 다음 주까지 할 한 가지를 정하게 합니다. 예시 중 하나를 골라도 좋다고 안내하세요.\n다음 상담 때 그 한 가지를 했는지 함께 확인하자고 약속하며 마칩니다.' }
+      notes: '학생들에게 30초 정도 시간을 주고 다음 주까지 할 한 가지를 정하게 합니다. 예시 중 하나를 골라도 좋다고 안내하세요.\n다음 상담 때 그 한 가지를 했는지 함께 확인하자고 약속하며 마칩니다.' },
+    /* [11] 경희대 누적 합격 (복사본 전용) — order에서 4번(목우 대학별 결과) 다음에 배치 */
+    { kicker: '목우 · 경희대 누적 합격', heroLabel: '경희대 합격', count: 75, unit: '명',
+      range: '2022학년도 ~ 2027학년도 수시',
+      others: [['한양대', 31], ['단국대', 98], ['동덕여대', 66], ['상명대', 66], ['숙명여대', 43], ['건국대', 53]],   /* 배경에 옅게 표시되는 다른 대학 누적 (같은 기간) */
+      foot: '2022학년도부터 올해(2027학년도) 수시까지 목우에서 경희대에 합격한 인원입니다.',
+      notes: '한 해 결과만이 아니라, 몇 년째 이어지고 있는 결과라는 걸 보여 주는 장입니다.\n2022학년도부터 올해 2027학년도 수시까지 목우에서 경희대에 75명이 합격했습니다. 올해 수시만 10명입니다.\n숫자가 다 올라간 뒤 잠깐 멈췄다가 말해 주세요.' },
+    /* [12] 9등급제 → 5등급제 환산표 (복사본 전용) — order에서 '선배들의 내신' 앞에 배치 */
+    { kicker: '9등급제 → 5등급제', headline: '선배들의 등급, <em>5등급제로 바꿔 보면</em>',
+      sub: '같은 위치(상위 %)를 기준으로 두 등급제를 나란히 놓았습니다. 다음 장의 선배 등급을 볼 때 참고하세요.',
+      nine: [4, 11, 23, 40, 60, 77, 89, 96, 100],
+      five: [10, 34, 66, 90, 100],
+      rows: [
+        ['1등급', '상위 10%', '1 ~ 2등급'],
+        ['2등급', '10 ~ 34%', '2등급 후반 ~ 4등급 초반'],
+        ['3등급', '34 ~ 66%', '4등급 후반 ~ 6등급 초반'],
+        ['4등급', '66 ~ 90%', '6등급 후반 ~ 8등급 초반'],
+        ['5등급', '90 ~ 100%', '8등급 후반 ~ 9등급']
+      ],
+      callout: '선배 합격생 평균 <b>3등급대</b>(9등급제)는<br>5등급제로 대략 <b>2등급</b> 수준입니다.',
+      caveat: '같은 상위 %를 기준으로 한 대략적인 환산입니다. 대학·전형마다 반영 방식이 다르니 참고용으로 보세요.',
+      notes: '다음 장에서 선배들의 내신을 9등급제 숫자로 보여 주기 때문에, 먼저 여러분이 쓰는 5등급제로는 어디쯤인지 감을 잡는 장입니다.\n위쪽 띠는 같은 “상위 %” 눈금 위에 두 등급제를 놓은 것입니다. 9등급제 1등급은 상위 4%, 5등급제 1등급은 상위 10%까지입니다.\n예를 들어 9등급제 3등급(상위 11~23%)은 5등급제로 2등급(상위 10~34%) 안에 들어갑니다. 그래서 선배 합격생 평균 3등급대는 여러분 기준으로 대략 2등급 수준이라고 보면 됩니다.\n정확한 환산은 대학·전형마다 다르므로 참고용이라고 꼭 말해 주세요.' }
   ]
 };
 </script>
